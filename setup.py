@@ -57,8 +57,10 @@ requirements = {
 entry_points = {
     "console_scripts": [
         "tensorflow-tts-preprocess=tensorflow_tts.bin.preprocess:preprocess",
+        "tensorflow-tts-preprocess-stft=tensorflow_tts.bin.preprocess_stft:preprocess",
         "tensorflow-tts-compute-statistics=tensorflow_tts.bin.preprocess:compute_statistics",
         "tensorflow-tts-normalize=tensorflow_tts.bin.preprocess:normalize",
+        "tensorflow-tts-normalize-stft=tensorflow_tts.bin.preprocess_stft:normalize",
     ]
 }
 

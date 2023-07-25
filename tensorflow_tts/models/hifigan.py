@@ -221,30 +221,30 @@ class TFHifiGANGenerator(BaseModel):
 
         self.hifigan = tf.keras.models.Sequential(layers)
 
-    def call(self, mels, **kwargs):
+    def call(self, log_mag_stfts, **kwargs):
         """Calculate forward propagation.
         Args:
             c (Tensor): Input tensor (B, T, channels)
         Returns:
             Tensor: Output tensor (B, T ** prod(upsample_scales), out_channels)
         """
-        return self.inference(mels)
+        return self.inference(log_mag_stfts)
 
     @tf.function(
         input_signature=[
-            tf.TensorSpec(shape=[None, None, 80], dtype=tf.float32, name="mels")
+            tf.TensorSpec(shape=[None, None, 513], dtype=tf.float32, name="log_mag_stfts")
         ]
     )
-    def inference(self, mels):
-        return self.hifigan(mels)
+    def inference(self, log_mag_stfts):
+        return self.hifigan(log_mag_stfts)
 
     @tf.function(
         input_signature=[
-            tf.TensorSpec(shape=[1, None, 80], dtype=tf.float32, name="mels")
+            tf.TensorSpec(shape=[1, None, 513], dtype=tf.float32, name="log_mag_stfts")
         ]
     )
-    def inference_tflite(self, mels):
-        return self.hifigan(mels)
+    def inference_tflite(self, log_mag_stfts):
+        return self.hifigan(log_mag_stfts)
 
     def _apply_weightnorm(self, list_layers):
         """Try apply weightnorm for all layer in list_layers."""
@@ -258,8 +258,8 @@ class TFHifiGANGenerator(BaseModel):
 
     def _build(self):
         """Build model by passing fake input."""
-        fake_mels = tf.random.uniform(shape=[1, 100, 80], dtype=tf.float32)
-        self(fake_mels)
+        fake_logg_mag_stfts = tf.random.uniform(shape=[1, 100, 80], dtype=tf.float32)
+        self(fake_logg_mag_stfts)
 
 
 class TFHifiGANPeriodDiscriminator(tf.keras.layers.Layer):
